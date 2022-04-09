@@ -1,16 +1,12 @@
 import React, { useEffect } from 'react';
-import { Button, StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button } from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
 
 import firestore from '@react-native-firebase/firestore';
+import UserModel, { IUser } from './src/model/UserModel';
 
-export type Props = {
-  name: string;
-  baseEnthusiasmLevel?: number;
-};
-
-const Hello: React.FC<Props> = ({ name, baseEnthusiasmLevel = 0 }) => {
-  const [users, setUsers] = React.useState<any[]>([]);
+const Hello: React.FC = () => {
+  const [users, setUsers] = React.useState<UserModel[]>([]);
 
   useEffect(() => {
     hideSplashScreen();
@@ -20,13 +16,12 @@ const Hello: React.FC<Props> = ({ name, baseEnthusiasmLevel = 0 }) => {
     const subscriber = firestore()
       .collection('users')
       .onSnapshot(querySnapshot => {
-        const nextUsers: any[] = [];
+        const nextUsers: UserModel[] = [];
 
         querySnapshot.forEach(document => {
-          nextUsers.push({
-            ...document.data(),
-            key: document.id,
-          });
+          nextUsers.push(
+            new UserModel({ ...document.data(), codigo: document.id } as IUser),
+          );
         });
 
         setUsers(nextUsers);
@@ -35,17 +30,32 @@ const Hello: React.FC<Props> = ({ name, baseEnthusiasmLevel = 0 }) => {
     return () => subscriber();
   }, []);
 
-  console.log({ users });
-
   const hideSplashScreen = async () => {
     await RNBootSplash.hide({ fade: true });
   };
 
   return (
     <View style={styles.container}>
-      <FlatList
+      <FlatList<UserModel>
         data={users}
-        renderItem={({ item }) => <Text>{item.nome}</Text>}
+        contentContainerStyle={{
+          paddingVertical: 20,
+        }}
+        renderItem={({ item }) => (
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              height: 60,
+              borderWidth: 1,
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+            }}>
+            <Text>{item?.nome}</Text>
+            <Button onPress={() => item.delete()} title="Excluir" />
+          </View>
+        )}
       />
     </View>
   );
@@ -54,7 +64,7 @@ const Hello: React.FC<Props> = ({ name, baseEnthusiasmLevel = 0 }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+
     justifyContent: 'center',
   },
 });
