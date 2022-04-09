@@ -1,51 +1,52 @@
-import React, {useEffect} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import React, { useEffect } from 'react';
+import { Button, StyleSheet, Text, View, FlatList } from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
+
+import firestore from '@react-native-firebase/firestore';
 
 export type Props = {
   name: string;
   baseEnthusiasmLevel?: number;
 };
 
-const Hello: React.FC<Props> = ({name, baseEnthusiasmLevel = 0}) => {
-  const [enthusiasmLevel, setEnthusiasmLevel] =
-    React.useState(baseEnthusiasmLevel);
-
-  const onIncrement = () => setEnthusiasmLevel(enthusiasmLevel + 1);
-  const onDecrement = () =>
-    setEnthusiasmLevel(enthusiasmLevel > 0 ? enthusiasmLevel - 1 : 0);
-
-  const getExclamationMarks = (numChars: number) =>
-    numChars > 0 ? Array(numChars + 1).join('!') : '';
+const Hello: React.FC<Props> = ({ name, baseEnthusiasmLevel = 0 }) => {
+  const [users, setUsers] = React.useState<any[]>([]);
 
   useEffect(() => {
     hideSplashScreen();
   }, []);
 
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('users')
+      .onSnapshot(querySnapshot => {
+        const nextUsers: any[] = [];
+
+        querySnapshot.forEach(document => {
+          nextUsers.push({
+            ...document.data(),
+            key: document.id,
+          });
+        });
+
+        setUsers(nextUsers);
+      });
+
+    return () => subscriber();
+  }, []);
+
+  console.log({ users });
+
   const hideSplashScreen = async () => {
-    await RNBootSplash.hide({fade: true});
+    await RNBootSplash.hide({ fade: true });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greeting}>
-        Hello {name}
-        {getExclamationMarks(enthusiasmLevel)}
-      </Text>
-      <View>
-        <Button
-          title="Increase enthusiasm"
-          accessibilityLabel="increment"
-          onPress={onIncrement}
-          color="blue"
-        />
-        <Button
-          title="Decrease enthusiasm"
-          accessibilityLabel="decrement"
-          onPress={onDecrement}
-          color="red"
-        />
-      </View>
+      <FlatList
+        data={users}
+        renderItem={({ item }) => <Text>{item.nome}</Text>}
+      />
     </View>
   );
 };
@@ -55,11 +56,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  greeting: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    margin: 16,
   },
 });
 

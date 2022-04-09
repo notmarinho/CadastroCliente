@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1051952074539",
+    "project_id": "cadastrocliente-61f1f",
+    "storage_bucket": "cadastrocliente-61f1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051952074539:android:f97ece46c1875285703f6e",
+        "android_client_info": {
+          "package_name": "com.cadastrocliente"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1051952074539-7u86bckui46tme2ppt1cf03dde5thh4e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cadastrocliente",
+            "certificate_hash": "31b28f5203668536d735471e4c6e50ae9304d7fc"
+          }
+        },
+        {
+          "client_id": "1051952074539-d3ahh6mr4bt1srnnf3bi7539ruf2g7i2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTc950PiteFeybZLAfSQa_GXc1lMrGyn4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1051952074539-d3ahh6mr4bt1srnnf3bi7539ruf2g7i2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
