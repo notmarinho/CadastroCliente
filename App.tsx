@@ -53,7 +53,7 @@ const Hello: React.FC = () => {
               paddingVertical: 10,
             }}>
             <Text>{item?.nome}</Text>
-            <Button onPress={() => item.delete()} title="Excluir" />
+            <Button onPress={() => item.delete()} title="Editar" />
           </View>
         )}
       />

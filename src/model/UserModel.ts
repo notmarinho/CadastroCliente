@@ -28,4 +28,13 @@ export default class UserModel {
       .then(() => console.log('User Deleted'))
       .catch(e => console.log('Error ao deletar', e));
   }
+
+  async update(nextUser: Partial<Omit<IUser, 'codigo'>>) {
+    await firestore()
+      .collection('users')
+      .doc(this.codigo)
+      .update(nextUser)
+      .then(() => console.log('Usuario editaro'))
+      .catch(e => console.log('Error ao editar', e));
+  }
 }
