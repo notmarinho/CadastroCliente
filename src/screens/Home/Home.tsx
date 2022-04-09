@@ -1,16 +1,12 @@
+import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, Button } from 'react-native';
-import RNBootSplash from 'react-native-bootsplash';
-
 import firestore from '@react-native-firebase/firestore';
-import UserModel, { IUser } from './src/model/UserModel';
 
-const Hello: React.FC = () => {
+import UserModel, { IUser } from '../../model/UserModel';
+import { HomeProps } from '../../routes/RouteTypes';
+
+const Home = ({ navigation }: HomeProps) => {
   const [users, setUsers] = React.useState<UserModel[]>([]);
-
-  useEffect(() => {
-    hideSplashScreen();
-  }, []);
 
   useEffect(() => {
     const subscriber = firestore()
@@ -30,10 +26,6 @@ const Hello: React.FC = () => {
     return () => subscriber();
   }, []);
 
-  const hideSplashScreen = async () => {
-    await RNBootSplash.hide({ fade: true });
-  };
-
   return (
     <View style={styles.container}>
       <FlatList<UserModel>
@@ -41,32 +33,39 @@ const Hello: React.FC = () => {
         contentContainerStyle={{
           paddingVertical: 20,
         }}
-        renderItem={({ item }) => (
+        renderItem={({ item: user }) => (
           <View
             style={{
               width: '100%',
               flexDirection: 'row',
               justifyContent: 'space-between',
               height: 60,
-              borderWidth: 1,
               paddingHorizontal: 20,
               paddingVertical: 10,
             }}>
-            <Text>{item?.nome}</Text>
-            <Button onPress={() => item.delete()} title="Editar" />
+            <Text>{user?.name}</Text>
+            <Button
+              onPress={() => navigation.navigate('SetUser', { user })}
+              title="Editar"
+            />
           </View>
         )}
+      />
+
+      <Button
+        onPress={() => navigation.navigate('SetUser')}
+        title="Criar Usuario"
       />
     </View>
   );
 };
 
+export default Home;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    padding: 20,
     justifyContent: 'center',
   },
 });
-
-export default Hello;

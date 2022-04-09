@@ -2,21 +2,21 @@ import firestore from '@react-native-firebase/firestore';
 
 export interface IUser {
   readonly codigo: string;
-  nome: string;
-  foto: string;
+  name: string;
+  picture: string;
   birthday: string;
 }
 
 export default class UserModel {
   private readonly codigo: string;
-  public nome: string;
-  public foto: string;
+  public name: string;
+  public picture: string;
   public birthday: string;
 
   constructor(props: IUser) {
     this.codigo = props.codigo;
-    this.foto = props.foto;
-    this.nome = props.nome;
+    this.picture = props.picture;
+    this.name = props.name;
     this.birthday = props.birthday;
   }
 
@@ -25,8 +25,8 @@ export default class UserModel {
       .collection('users')
       .doc(this.codigo)
       .delete()
-      .then(() => console.log('User Deleted'))
-      .catch(e => console.log('Error ao deletar', e));
+      .then(() => console.log(`${this.name} Deleted`))
+      .catch(error => console.log('Error ao deletar', error));
   }
 
   async update(nextUser: Partial<Omit<IUser, 'codigo'>>) {
@@ -34,7 +34,7 @@ export default class UserModel {
       .collection('users')
       .doc(this.codigo)
       .update(nextUser)
-      .then(() => console.log('Usuario editaro'))
-      .catch(e => console.log('Error ao editar', e));
+      .then(() => console.log(`Usuario editaro`))
+      .catch(error => console.log('Error ao editar', error));
   }
 }
