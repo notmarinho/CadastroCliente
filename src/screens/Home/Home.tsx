@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
   flatlist: {
     flexGrow: 1,
     paddingHorizontal: 30,
+    paddingTop: 20,
     paddingBottom: 120,
   },
   flatlistSeparator: {

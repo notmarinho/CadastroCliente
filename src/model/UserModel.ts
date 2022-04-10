@@ -48,6 +48,8 @@ export default class UserModel {
       );
       const newPicturePath = `userPicture/${newFileName}`;
 
+
+      //Try to use Promise.all but for some reason firebase returns error
       await storage().ref(newPicturePath).putFile(picturePath);
       await storage().ref(this.picture).delete();
       await firestore()

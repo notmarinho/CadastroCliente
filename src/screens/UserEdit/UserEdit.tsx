@@ -164,11 +164,12 @@ const styles = StyleSheet.create({
     transform: [{ translateY: 5 }],
     borderBottomWidth: StyleSheet.hairlineWidth,
     fontFamily: fonts.regular,
+    color: colors.black,
   },
   title: {
-    fontSize: 36,
+    fontSize: 28,
     fontFamily: fonts.bold,
-    color: colors.text,
+    color: colors.black,
     marginBottom: 80,
   },
   headerContainer: {
