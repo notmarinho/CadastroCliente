@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import firestore from '@react-native-firebase/firestore';
 
 import UserModel, { IUser } from '../../../model/UserModel';
 
 const useHome = () => {
-  const [users, setUsers] = React.useState<UserModel[]>([]);
+  const [allUsers, setAllUsers] = useState<UserModel[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<UserModel[]>([]);
 
   useEffect(() => {
     const subscriber = firestore()
@@ -19,13 +20,24 @@ const useHome = () => {
           );
         });
 
-        setUsers(nextUsers);
+        setAllUsers(nextUsers);
+        setFilteredUsers(nextUsers);
       });
 
     return () => subscriber();
   }, []);
 
-  return { users };
+  const onSearch = (searchValue: string) => {
+    const cleanSearchString = searchValue.toLowerCase().trim();
+
+    const filterUsers = allUsers.filter(
+      value => value.name.toLowerCase().search(cleanSearchString) != -1,
+    );
+
+    setFilteredUsers(filterUsers);
+  };
+
+  return { users: filteredUsers, onSearch };
 };
 
 export default useHome;

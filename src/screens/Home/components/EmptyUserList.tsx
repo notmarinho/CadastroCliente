@@ -8,7 +8,7 @@ const EmptyList = () => {
   return (
     <View style={styles.container}>
       <Icon
-        name="rocket"
+        name="account-off-outline"
         size={48}
         color={colors.primary}
         style={styles.icon}
@@ -28,8 +28,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: fonts.regular,
-    fontSize: 24,
+    fontSize: 20,
     color: colors.text,
   },
-  icon: { marginBottom: 30 },
+  icon: {
+    marginBottom: 20,
+  },
 });

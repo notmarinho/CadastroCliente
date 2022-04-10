@@ -1,5 +1,4 @@
 import {
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,6 +8,7 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FastImage from 'react-native-fast-image';
 import { useNavigation } from '@react-navigation/native';
 
 import UserModel from '../../../model/UserModel';
@@ -30,8 +30,17 @@ const CardUser: React.FC<ICardUser> = ({ item: user, index }) => {
   });
 
   useEffect(() => {
-    user.getPictureUrl().then(setPictureUrl);
+    let isSubscribed = true;
+    user.getPictureUrl().then(url => {
+      if (isSubscribed) {
+        setPictureUrl(url);
+      }
+    });
     enteringAnimation();
+
+    return () => {
+      isSubscribed = false;
+    };
   }, [user.picture]);
 
   const enteringAnimation = () => {
@@ -49,11 +58,13 @@ const CardUser: React.FC<ICardUser> = ({ item: user, index }) => {
       style={[styles.container, { opacity, transform: [{ translateX }] }]}>
       <View style={styles.imageContainer}>
         {!!pictureUrl && (
-          <Image
+          <FastImage
             style={styles.userImage}
             source={{
               uri: pictureUrl,
+              priority: FastImage.priority.normal,
             }}
+            resizeMode={FastImage.resizeMode.cover}
           />
         )}
       </View>
@@ -87,6 +98,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+    backgroundColor: colors.card,
     marginRight: 10,
     overflow: 'hidden',
   },

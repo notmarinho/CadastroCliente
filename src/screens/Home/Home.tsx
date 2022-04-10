@@ -19,23 +19,25 @@ import EmptyList from './components/EmptyUserList';
 import HeaderList from './components/HeaderUserList';
 
 const Home = ({ navigation }: HomeProps) => {
-  const { users } = useHome();
+  const { users, onSearch } = useHome();
 
   const _flatlistSeparator = () => <View style={styles.flatlistSeparator} />;
 
   const _flatlistItem = (props: any) => <CardUser {...props} />;
 
+  // const _flatlistHeader = () => <HeaderList onSearch={onSearch} />;
+
   return (
     <>
       <StatusBar backgroundColor={colors.background} barStyle="dark-content" />
       <View style={styles.container}>
+        <HeaderList onSearch={onSearch} />
         <FlatList<UserModel>
           data={users}
           contentContainerStyle={styles.flatlist}
           renderItem={_flatlistItem}
           ItemSeparatorComponent={_flatlistSeparator}
           ListEmptyComponent={EmptyList}
-          ListHeaderComponent={HeaderList}
         />
       </View>
       <FAB onPress={() => navigation.navigate('UserCreate')} />
@@ -54,11 +56,11 @@ const styles = StyleSheet.create({
   flatlist: {
     flexGrow: 1,
     paddingHorizontal: 30,
-    paddingTop: 20,
     paddingBottom: 120,
   },
   flatlistSeparator: {
     margin: 5,
     borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.card,
   },
 });

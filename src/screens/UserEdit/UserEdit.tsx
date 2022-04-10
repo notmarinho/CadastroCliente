@@ -10,15 +10,16 @@ import {
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNDateTimePicker, {
   DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 
 import { UserEditProps } from '../../routes/RouteTypes';
-import useUserEdit from './hooks/useUserEdit';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, fonts } from '../../global/theme';
 import RowInput from '../../global/components/RowInput';
+
+import useUserEdit from './hooks/useUserEdit';
 
 const UserEdit = ({ route, navigation }: UserEditProps) => {
   const currentUser = route.params.user;
@@ -29,10 +30,6 @@ const UserEdit = ({ route, navigation }: UserEditProps) => {
   const [name, setName] = useState(currentUser.name);
   const [birthday, setBirthday] = useState(currentUser.birthday);
 
-  useEffect(() => {
-    currentUser.getPictureUrl().then(setPictureUrl);
-  }, [currentUser]);
-
   const {
     isLoading,
     openGallery,
@@ -42,6 +39,23 @@ const UserEdit = ({ route, navigation }: UserEditProps) => {
     updateUserPicture,
   } = useUserEdit(currentUser);
 
+  useEffect(() => {
+    let isSubscribed = true;
+    currentUser.getPictureUrl().then(url => {
+      if (isSubscribed) {
+        setPictureUrl(url);
+      }
+    });
+
+    return () => {
+      isSubscribed = false;
+    };
+  }, [currentUser]);
+
+  const hasError = () => birthday === null || name === '';
+
+  const onDeletePress = () => currentUser.delete().then(navigation.goBack);
+
   const onImagePress = () => openGallery().then(setPicturePath);
 
   const onSubmit = () => {
@@ -49,10 +63,6 @@ const UserEdit = ({ route, navigation }: UserEditProps) => {
       updateUserPicture(picturePath);
     }
     updateUser({ birthday, name });
-  };
-
-  const hasError = () => {
-    return birthday === null || name === '';
   };
 
   const onDateChange = (
@@ -93,7 +103,7 @@ const UserEdit = ({ route, navigation }: UserEditProps) => {
         <RowInput title="Foto">
           <TouchableOpacity activeOpacity={0.7} onPress={onImagePress}>
             <Image
-              style={{ width: 100, height: 100, borderRadius: 20 }}
+              style={styles.userImage}
               resizeMode="contain"
               source={{
                 uri: picturePath || pictureUrl,
@@ -121,6 +131,10 @@ const UserEdit = ({ route, navigation }: UserEditProps) => {
             </Text>
           </TouchableOpacity>
         </RowInput>
+
+        <TouchableOpacity style={styles.deleteButton} onPress={onDeletePress}>
+          <Text style={styles.deleteButtonLabel}>Remover Usuário</Text>
+        </TouchableOpacity>
       </ScrollView>
       {showDatePicker && (
         <RNDateTimePicker
@@ -174,5 +188,25 @@ const styles = StyleSheet.create({
   backButton: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  userImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 20,
+    backgroundColor: colors.card,
+  },
+  deleteButton: {
+    width: '100%',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'red',
+  },
+  deleteButtonLabel: {
+    fontFamily: fonts.regular,
+    color: 'red',
+    fontSize: 18,
   },
 });
