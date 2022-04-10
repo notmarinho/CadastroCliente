@@ -15,7 +15,7 @@ const useHome = () => {
 
         querySnapshot.forEach(document => {
           nextUsers.push(
-            new UserModel({ ...document.data(), codigo: document.id } as IUser),
+            new UserModel({ ...document.data(), code: document.id } as IUser),
           );
         });
 

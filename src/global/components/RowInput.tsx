@@ -1,6 +1,6 @@
 import { FlexStyle, StyleSheet, Text, View } from 'react-native';
 import React, { ReactNode } from 'react';
-import { colors } from '../theme';
+import { colors, fonts } from '../theme';
 
 interface IRowInput {
   title: string;
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     color: colors.text,
+    fontFamily: fonts.regular,
   },
   contentContainer: {
     flex: 2,

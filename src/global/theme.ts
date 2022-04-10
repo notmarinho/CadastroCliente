@@ -1,6 +1,6 @@
 export const colors = {
-  background: '#01031b',
-  card: '#17192a',
+  background: '#ffffff',
+  card: '#f7f5f9',
   notification: '#24e473',
   text: '#646068',
   primary: '#4287ff',
@@ -8,6 +8,6 @@ export const colors = {
 
 export const fonts = {
   bold: 'SourceSansPro-Bold',
-  regular: 'SourceSansPro-Light',
-  light: 'SourceSansPro-Regular',
+  regular: 'SourceSansPro-Regular',
+  light: 'SourceSansPro-Light',
 };

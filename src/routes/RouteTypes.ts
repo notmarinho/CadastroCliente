@@ -3,9 +3,12 @@ import UserModel from '../model/UserModel';
 
 export type AppStackParamList = {
   Home: undefined;
-  SetUser: { user: UserModel } | undefined;
+  UserCreate: undefined;
+  UserEdit: { user: UserModel };
 };
 
-export type SetUserProps = NativeStackScreenProps<AppStackParamList, 'SetUser'>;
+export type UserCreateProps = NativeStackScreenProps<AppStackParamList, 'UserEdit'>;
+
+export type UserEditProps = NativeStackScreenProps<AppStackParamList, 'UserEdit'>;
 
 export type HomeProps = NativeStackScreenProps<AppStackParamList, 'Home'>;

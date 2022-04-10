@@ -32,11 +32,10 @@ const CardUser: React.FC<ICardUser> = ({ item: user, index }) => {
   useEffect(() => {
     user.getPictureUrl().then(setPictureUrl);
     enteringAnimation();
-  }, []);
+  }, [user.picture]);
 
   const enteringAnimation = () => {
     Animated.sequence([
-      Animated.delay(250 * index),
       Animated.timing(opacity, {
         toValue: 1,
         duration: 500,
@@ -60,12 +59,15 @@ const CardUser: React.FC<ICardUser> = ({ item: user, index }) => {
       </View>
       <View style={styles.userInfoContainer}>
         <Text style={styles.userName}>{user.name}</Text>
-        <Text style={styles.userAge}>{user.birthday}</Text>
+        <View style={styles.birthdayContainer}>
+          <Icon name="cake-variant" color={colors.primary} size={16} />
+          <Text style={styles.userAge}>{user.birthdayString}</Text>
+        </View>
       </View>
       <TouchableOpacity
         style={styles.editContainer}
-        onPress={() => navigation.navigate('SetUser', { user })}>
-        <Icon name="circle-edit-outline" color={colors.background} size={20} />
+        onPress={() => navigation.navigate('UserEdit', { user })}>
+        <Icon name="circle-edit-outline" color={colors.primary} size={20} />
       </TouchableOpacity>
     </Animated.View>
   );
@@ -77,11 +79,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 70,
+    height: 80,
     borderRadius: 8,
-    paddingHorizontal: 15,
     paddingVertical: 10,
-    backgroundColor: colors.card,
   },
   imageContainer: {
     width: 50,
@@ -104,15 +104,19 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   userAge: {
+    marginLeft: 5,
     fontSize: 14,
     color: colors.text,
   },
+  birthdayContainer: {
+    flexDirection: 'row',
+  },
   editContainer: {
-    height: 30,
-    width: 30,
-    borderRadius: 25,
+    height: 50,
+    width: 50,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.notification,
+    backgroundColor: colors.card,
   },
 });

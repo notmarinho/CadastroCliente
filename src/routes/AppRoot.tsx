@@ -5,7 +5,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomeScreen from '../screens/Home/Home';
-import SetUserScreen from '../screens/SetUser/SetUser';
+import UserCreateScreen from '../screens/UserCreate/UserCreate';
+import UserEditScreen from '../screens/UserEdit/UserEdit';
 
 import { AppStackParamList } from './RouteTypes';
 
@@ -22,7 +23,8 @@ export default function AppRoot() {
     <NavigationContainer onReady={() => RNBootSplash.hide({ fade: true })}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="SetUser" component={SetUserScreen} />
+        <Stack.Screen name="UserCreate" component={UserCreateScreen} />
+        <Stack.Screen name="UserEdit" component={UserEditScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

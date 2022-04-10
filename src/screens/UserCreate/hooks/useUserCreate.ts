@@ -3,21 +3,20 @@ import React, { useState } from 'react';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 
-import { IUser } from '../../../model/UserModel';
+import UserModel, { IUser } from '../../../model/UserModel';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const useCreateForm = () => {
+const useUserCreate = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const navigation = useNavigation();
 
-  const onSubmit = (user: IUser) => {
-    const isValid = validateFields(user);
-
-    if (isValid) {
-      registerUser(user).then(navigation.goBack);
-    }
+  const updateUser = async (user: UserModel, newProps: Partial<IUser>) => {
+    setIsLoading(true);
+    await user.update(newProps);
+    setIsLoading(false);
   };
 
   const registerUser = async (user: IUser) => {
@@ -25,14 +24,13 @@ const useCreateForm = () => {
     await uploadPicture(user.picture);
     await registerUserData(user);
     setIsLoading(false);
+    navigation.goBack();
   };
 
   const uploadPicture = async (picturePath: string) => {
     try {
       const filename = picturePath.substring(picturePath.lastIndexOf('/') + 1);
       const filePath = `userPicture/${filename}`;
-
-      console.log({ filePathPicture: filePath });
       await storage().ref(filePath).putFile(picturePath);
     } catch (error) {
       console.error('CATCH > useCreateForm > uploadPicture', error);
@@ -70,25 +68,14 @@ const useCreateForm = () => {
     return selectedImage;
   };
 
-  const validateFields = (user: IUser) => {
-    let hasError = false;
-
-    if (!!!user.name) {
-      hasError = true;
-      Alert.alert('Nome', 'O nome nao pode ser vazio.');
-    } else if (!!!user.picture) {
-      hasError = true;
-      Alert.alert('Foto', 'Escolha uma foto para seu usuário.');
-    }
-
-    if (hasError) {
-      return false;
-    }
-
-    return true;
+  return {
+    registerUser,
+    updateUser,
+    isLoading,
+    openGallery,
+    showDatePicker,
+    setShowDatePicker,
   };
-
-  return { onSubmit, isLoading, openGallery };
 };
 
-export default useCreateForm;
+export default useUserCreate;
