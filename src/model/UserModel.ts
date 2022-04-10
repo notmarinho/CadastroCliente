@@ -1,4 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 export interface IUser {
   readonly codigo: string;
@@ -18,6 +19,12 @@ export default class UserModel {
     this.picture = props.picture;
     this.name = props.name;
     this.birthday = props.birthday;
+    this.getPictureUrl();
+  }
+
+  async getPictureUrl() {
+    const url = await storage().ref(this.picture).getDownloadURL();
+    return url;
   }
 
   async delete() {
@@ -25,7 +32,10 @@ export default class UserModel {
       .collection('users')
       .doc(this.codigo)
       .delete()
-      .then(() => console.log(`${this.name} Deleted`))
+      .then(async () => {
+        console.log(`${this.name} Deleted`);
+        await storage().ref(this.picture).delete();
+      })
       .catch(error => console.log('Error ao deletar', error));
   }
 

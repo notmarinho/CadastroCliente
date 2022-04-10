@@ -1,62 +1,45 @@
-import { Button, FlatList, StyleSheet, Text, View } from 'react-native';
-import React, { useEffect } from 'react';
-import firestore from '@react-native-firebase/firestore';
+import {
+  Button,
+  FlatList,
+  Image,
+  StatusBar,
+  StyleSheet,
+  View,
+  ListRenderItem,
+} from 'react-native';
+import React from 'react';
 
-import UserModel, { IUser } from '../../model/UserModel';
+import UserModel from '../../model/UserModel';
 import { HomeProps } from '../../routes/RouteTypes';
+import CardUser from './components/CardUser';
+import useHome from './hooks/useHome';
+import { colors } from '../../global/theme';
+import FAB from '../../global/components/FAB';
 
 const Home = ({ navigation }: HomeProps) => {
-  const [users, setUsers] = React.useState<UserModel[]>([]);
+  const { users } = useHome();
 
-  useEffect(() => {
-    const subscriber = firestore()
-      .collection('users')
-      .onSnapshot(querySnapshot => {
-        const nextUsers: UserModel[] = [];
+  const _flatlistSeparator = () => <View style={styles.flatlistSeparator} />;
 
-        querySnapshot.forEach(document => {
-          nextUsers.push(
-            new UserModel({ ...document.data(), codigo: document.id } as IUser),
-          );
-        });
-
-        setUsers(nextUsers);
-      });
-
-    return () => subscriber();
-  }, []);
+  const _flatlistItem = (props: any) => <CardUser {...props} />;
 
   return (
-    <View style={styles.container}>
-      <FlatList<UserModel>
-        data={users}
-        contentContainerStyle={{
-          paddingVertical: 20,
-        }}
-        renderItem={({ item: user }) => (
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              height: 60,
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-            }}>
-            <Text>{user?.name}</Text>
-            <Button
-              onPress={() => navigation.navigate('SetUser', { user })}
-              title="Editar"
-            />
-          </View>
-        )}
-      />
-
-      <Button
-        onPress={() => navigation.navigate('SetUser')}
-        title="Criar Usuario"
-      />
-    </View>
+    <>
+      <StatusBar backgroundColor={colors.background} />
+      <View style={styles.container}>
+        <Image
+          source={require('../../../assets/logo-color.png')}
+          style={{ width: 70, height: 70 }}
+        />
+        <FlatList<UserModel>
+          data={users}
+          contentContainerStyle={styles.flatlist}
+          renderItem={_flatlistItem}
+          ItemSeparatorComponent={_flatlistSeparator}
+        />
+      </View>
+      <FAB onPress={() => navigation.navigate('SetUser')} />
+    </>
   );
 };
 
@@ -65,7 +48,13 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     justifyContent: 'center',
+    backgroundColor: colors.background,
+  },
+  flatlist: {
+    padding: 20,
+  },
+  flatlistSeparator: {
+    margin: 5,
   },
 });

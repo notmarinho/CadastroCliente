@@ -208,7 +208,7 @@ android {
         abi {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk false  // If true, also generate a universal APK
+            universalApk true  // If true, also generate a universal APK
             include (*reactNativeArchitectures())
         }
     }
@@ -315,6 +315,8 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 def isNewArchitectureEnabled() {
     // To opt-in for the New Architecture, you can either:

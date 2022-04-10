@@ -19,8 +19,8 @@ const Stack = createNativeStackNavigator();
 
 export default function AppRoot() {
   return (
-    <NavigationContainer onReady={() => RNBootSplash.hide()}>
-      <Stack.Navigator>
+    <NavigationContainer onReady={() => RNBootSplash.hide({ fade: true })}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="SetUser" component={SetUserScreen} />
       </Stack.Navigator>

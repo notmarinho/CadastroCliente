@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SetUserProps } from '../../routes/RouteTypes';
-import EditForm from './components/EditForm';
-import CreateForm from './components/CreateForm';
+import EditForm from './components/EditUserForm';
+import CreateForm from './components/CreateUserForm';
 
 const SetUser = ({ route }: SetUserProps) => {
   const [isEditMode, setIsEditMode] = useState(false);
